@@ -7,10 +7,10 @@ let ultimoTag = '';
 let lecturas = [];
 
 /**
- * Convierte un UID hexadecimal en formato hex y decimal.
- * El resto de conversiones quedan comentadas para no afectar.
+ * Convierte un UID hexadecimal en varios formatos útiles.
  * @param {string} hexUid - UID en cadena hexadecimal
- * @returns {{hex:string, decimal:string}}
+ * @returns {{hex:string, decimal:string, ascii:string, bytesBigEndian:number[], 
+   bytesLittleEndian:number[], base64:string}}
  */
 function formatUid(hexUid) {
   const buf = Buffer.from(hexUid, 'hex');
@@ -18,7 +18,6 @@ function formatUid(hexUid) {
   // Decimal (BigInt para no perder precisión)
   const decimal = BigInt('0x' + hexUid).toString(10);
 
-  /*
   // ASCII
   const ascii = buf.toString('ascii');
 
@@ -28,9 +27,8 @@ function formatUid(hexUid) {
 
   // Base64
   const base64 = buf.toString('base64');
-  */
 
-  return { hex: hexUid, decimal /*, ascii, bytesBigEndian, bytesLittleEndian, base64 */ };
+  return { hex: hexUid, decimal, ascii, bytesBigEndian, bytesLittleEndian, base64 };
 }
 
 const getUltimoTag = () => ultimoTag;
@@ -94,10 +92,9 @@ SerialPort.list().then((ports) => {
           ultimoTag = tag;
           lecturas.push(tag);
 
-          // Formatear UID y mostrar solo decimal
+          // Formatear UID en varios formatos
           const formatted = formatUid(tag);
-          console.log('Valor decimal:', formatted.decimal);
-          // console.log('Tag formateado completo:', formatted);
+          console.log('Tag formateado:', formatted);
 
           guardarTagEnDB(tag);
         } else {
