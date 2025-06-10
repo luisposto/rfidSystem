@@ -83,5 +83,4 @@ SerialPort.list().then((ports) => {
 }).catch((err) => {
   console.error('Error al listar puertos seriales:', err.message);
 });
-
 module.exports = { getUltimoTag, getLecturas };
